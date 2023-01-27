@@ -11,5 +11,5 @@ output "instance_private_ip" {
 }
 
 output "instance_https_url" {
-  value = (local.is_public_subnet ? "https://${oci_core_instance.simple_vm.public_ip}" : "https://${oci_core_instance.simple_vm.private_ip}")
+  value = "https://${oci_core_instance.simple_vm.public_ip}"
 }
