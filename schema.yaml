@@ -1,0 +1,103 @@
+title: Sample Marketplace Stack / ORM Application
+description: This is a Sample Marketplace Stack / ORM Application
+schemaVersion: 1.1.0
+version: "20230127"
+
+locale: "en"
+variableGroups:
+  - title: "Hidden Variable Group"
+    visible: false
+    variables:
+      - tenancy_ocid
+      - region
+
+  - title: "Compute Configuration"
+    variables:
+      - compute_compartment_ocid
+      - vm_display_name
+      - vm_compute_shape
+
+variables:
+######################################################
+##############    HIDDEN VARIABLES       #############
+######################################################
+
+  tenancy_ocid:
+    type: string
+    title: Tenancy ID
+    description: The Oracle Cloud Identifier (OCID) for your tenancy
+    required: true
+
+  region:
+    type: oci:identity:region:name
+    title: Region
+    description: The region in which to create all resources
+    required: true
+
+  availability_domain_number:
+    type: string
+    required: false
+    description: Availability Domain Number (Not used)
+
+######################################################
+##############    COMPUTE VARIABLES      #############
+######################################################
+
+  compute_compartment_ocid:
+    type: oci:identity:compartment:id
+    required: true
+    title: Compute Compartment
+    description: The compartment in which to create all Compute resources
+    default: compartment_ocid
+
+  vm_display_name:
+    type: string
+    required: true
+    title: Instance Name
+    description: The name of the Instance
+
+  vm_compute_shape:
+    type: oci:core:instanceshape:name
+    default: VM.Standard2.2
+    title: Compute Shape
+    required: true
+    dependsOn:
+      compartmentId: compute_compartment_ocid
+      #Comment in to restrict to marketplace image allowed shapes 
+      #imageId: mp_listing_resource_id
+
+#############################################
+###########    OUTPUT GROUPS     ############
+#############################################
+
+outputGroups:
+  - title: "Instance Management"
+    outputs:
+      - instance_public_ip
+      - instance_private_ip
+
+
+#############################################
+##############     OUTPUTS     ##############
+#############################################
+
+outputs:
+  instance_https_url:
+    type: link
+    title: Open Application URL
+    visible: false
+
+  instance_public_ip:
+    type: link
+    title: Public IP
+    visible: #($mgmt_subnet_type == "Public Subnet")
+      eq:
+      - mgmt_subnet_type
+      - "Public Subnet"
+
+  instance_private_ip:
+    type: link
+    title: Private IP
+    visible: true
+
+primaryOutputButton: instance_https_url

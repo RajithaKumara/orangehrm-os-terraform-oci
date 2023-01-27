@@ -14,6 +14,9 @@ variable "region" {
 #  Compute Configuration   #
 ############################
 
+variable "compute_compartment_ocid" {
+}
+
 variable "vm_display_name" {
   description = "Instance Name"
   default     = "simple-vm"
