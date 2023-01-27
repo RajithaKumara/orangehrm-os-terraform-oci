@@ -13,9 +13,11 @@ variableGroups:
 
   - title: "Compute Configuration"
     variables:
-      - compute_compartment_ocid
+      - compartment_ocid
       - vm_display_name
       - vm_compute_shape
+      - vm_flex_shape_ocpus
+      - availability_domain_name
 
 variables:
 ######################################################
@@ -43,12 +45,21 @@ variables:
 ##############    COMPUTE VARIABLES      #############
 ######################################################
 
-  compute_compartment_ocid:
+  compartment_ocid:
     type: oci:identity:compartment:id
     required: true
     title: Compute Compartment
     description: The compartment in which to create all Compute resources
     default: compartment_ocid
+  
+  availability_domain_name:
+    type: oci:identity:availabilitydomain:name
+    dependsOn:
+      compartmentId: compute_compartment_ocid
+    required: true
+    default: 1
+    title: Availability Domain
+    description: Availability Domain
 
   vm_display_name:
     type: string
@@ -65,6 +76,18 @@ variables:
       compartmentId: compute_compartment_ocid
       #Comment in to restrict to marketplace image allowed shapes 
       #imageId: mp_listing_resource_id
+  
+  vm_flex_shape_ocpus:
+    visible: #($vm_compute_shape  == ""VM.Standard.E3.Flex"")
+      eq:
+        - vm_compute_shape
+        - "VM.Standard.E3.Flex"
+    type: integer
+    default: 2
+    title: Flex Shape OCPUs
+    minimum: 1
+    maximum: 64
+    required: false
 
 #############################################
 ###########    OUTPUT GROUPS     ############

@@ -14,7 +14,7 @@ variable "region" {
 #  Compute Configuration   #
 ############################
 
-variable "compute_compartment_ocid" {
+variable "compartment_ocid" {
 }
 
 variable "vm_display_name" {
@@ -24,5 +24,15 @@ variable "vm_display_name" {
 
 variable "vm_compute_shape" {
   description = "Compute Shape"
-  default     = "VM.Standard2.2" //2 cores
+  default     = "VM.Standard.E3.Flex"
+}
+
+variable "flex_shape_ocpus" {
+  description = "Flex Instance shape OCPUs"
+  default     = 1
+}
+
+variable "flex_shape_memory" {
+  description = "Flex Instance shape Memory (GB)"
+  default     = 6
 }
