@@ -10,6 +10,7 @@ variableGroups:
     variables:
       - tenancy_ocid
       - region
+      - availability_domain_number
 
   - title: "Compute Configuration"
     variables:
@@ -36,6 +37,11 @@ variables:
     title: Region
     description: The region in which to create all resources
     required: true
+  
+  availability_domain_number:
+    type: string
+    required: false
+    description: Availability Domain Number (Not used)
 
 ######################################################
 ##############    COMPUTE VARIABLES      #############
