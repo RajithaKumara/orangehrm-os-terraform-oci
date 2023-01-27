@@ -27,12 +27,12 @@ variable "vm_compute_shape" {
   default     = "VM.Standard.E3.Flex"
 }
 
-variable "flex_shape_ocpus" {
+variable "vm_flex_shape_ocpus" {
   description = "Flex Instance shape OCPUs"
   default     = 1
 }
 
-variable "flex_shape_memory" {
+variable "vm_flex_shape_memory" {
   description = "Flex Instance shape Memory (GB)"
   default     = 6
 }

@@ -14,8 +14,8 @@ resource "oci_core_instance" "simple_vm" {
   dynamic "shape_config" {
     for_each = local.is_flex_shape
     content {
-      memory_in_gbs = var.flex_shape_memory
-      ocpus         = var.flex_shape_ocpus
+      memory_in_gbs = var.vm_flex_shape_memory
+      ocpus         = var.vm_flex_shape_ocpus
     }
   }
 }
