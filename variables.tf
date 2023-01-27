@@ -11,11 +11,25 @@ variable "region" {
 }
 
 ############################
-#  Compute Configuration   #
+# Additional Configuration #
 ############################
 
 variable "compartment_ocid" {
 }
+
+variable "tag_key_name" {
+  description = "Free-form tag key name"
+  default     = "App"
+}
+
+variable "tag_value" {
+  description = "Free-form tag value"
+  default     = "OrangeHRM"
+}
+
+############################
+#  Compute Configuration   #
+############################
 
 variable "availability_domain_name" {
   default     = ""
@@ -45,4 +59,38 @@ variable "vm_flex_shape_ocpus" {
 variable "vm_flex_shape_memory" {
   description = "Flex Instance shape Memory (GB)"
   default     = 6
+}
+
+############################
+#  Network Configuration   #
+############################
+
+variable "vcn_display_name" {
+  description = "VCN Name"
+  default     = "simple-vcn"
+}
+
+variable "vcn_cidr_block" {
+  description = "VCN CIDR"
+  default     = "10.0.0.0/16"
+}
+
+variable "vcn_dns_label" {
+  description = "VCN DNS Label"
+  default     = "simplevcn"
+}
+
+variable "subnet_display_name" {
+  description = "Subnet Name"
+  default     = "simple-subnet"
+}
+
+variable "subnet_cidr_block" {
+  description = "Subnet CIDR"
+  default     = "10.0.0.0/24"
+}
+
+variable "subnet_dns_label" {
+  description = "Subnet DNS Label"
+  default     = "simplesubnet"
 }

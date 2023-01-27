@@ -21,6 +21,19 @@ variableGroups:
       - vm_flex_shape_memory
       - availability_domain_name
 
+  - title: "Virtual Cloud Network"
+    variables:
+      - vcn_display_name
+      - vcn_dns_label
+      - vcn_cidr_block
+
+  - title: "Simple Subnet"
+    visible: true
+    variables:
+      - subnet_display_name
+      - subnet_dns_label
+      - subnet_cidr_block
+
 variables:
 ######################################################
 ##############    HIDDEN VARIABLES       #############
@@ -128,6 +141,61 @@ variables:
           - eq:
             - vm_compute_shape
             - "VM.Optimized3.Flex"
+
+######################################################
+##############     NETWORK VARIABLES     #############
+######################################################
+
+######## VCN ########
+
+  vcn_display_name:
+    visible: true
+    type: string
+    required: true
+    title: Name
+    description: The name of the new Virtual Cloud Network (VCN)
+
+  vcn_cidr_block:
+    visible: true
+    type: string
+    required: true
+    pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
+    title: CIDR Block
+    description: The CIDR of the new Virtual Cloud Network (VCN). If you plan to peer this VCN with another VCN, the VCNs must not have overlapping CIDRs.
+    default: "10.0.0.0/16"
+
+  vcn_dns_label:
+    visible: true
+    type: string
+    required: true
+    title: DNS Label
+    maxLenght: 15
+    description: VCN DNS Label. Only letters and numbers, starting with a letter. 15 characters max.
+
+######## MANAGEMENT SUBNET ########
+  subnet_display_name:
+    visible: true
+    type: string
+    required: true
+    title: Name
+    description: The name of the new Subnet
+
+  subnet_cidr_block:
+    visible: true
+    type: string
+    pattern: "^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\\/(3[0-2]|[1-2]?[0-9])$"
+    required: true
+    title: CIDR Block
+    description: The CIDR of the new Subnet. The new subnet's CIDR should not overlap with any other subnet CIDRs.
+    default: "10.0.0.0/24"
+
+  subnet_dns_label:
+    visible: true
+    type: string
+    required: true
+    title: DNS Label
+    maxLenght: 15
+    description: Subnet DNS Label. Only letters and numbers, starting with a letter. 15 characters max.
 
 #############################################
 ###########    OUTPUT GROUPS     ############
