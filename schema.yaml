@@ -34,6 +34,11 @@ variableGroups:
       - subnet_dns_label
       - subnet_cidr_block
 
+  - title: "Additional Configuration Options"
+    variables:
+      - tag_key_name
+      - tag_value
+
 variables:
 ######################################################
 ##############    HIDDEN VARIABLES       #############
@@ -66,6 +71,16 @@ variables:
     title: Compute Compartment
     description: The compartment in which to create all Compute resources
     default: compartment_ocid
+  
+  tag_key_name:
+    type: string
+    required: true
+    title: Tag key name
+
+  tag_value:
+    type: string
+    required: true
+    title: Tag value
   
   availability_domain_name:
     type: oci:identity:availabilitydomain:name

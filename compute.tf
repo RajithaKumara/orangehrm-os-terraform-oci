@@ -18,4 +18,11 @@ resource "oci_core_instance" "simple_vm" {
       ocpus         = var.vm_flex_shape_ocpus
     }
   }
+
+  create_vnic_details {
+    subnet_id              = local.use_existing_network ? var.subnet_id : oci_core_subnet.simple_subnet[0].id
+    display_name           = var.subnet_display_name
+    assign_public_ip       = local.is_public_subnet
+    skip_source_dest_check = false
+  }
 }

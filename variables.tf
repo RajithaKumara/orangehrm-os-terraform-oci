@@ -80,6 +80,10 @@ variable "vcn_dns_label" {
   default     = "simplevcn"
 }
 
+variable "subnet_id" {
+  default = ""
+}
+
 variable "subnet_display_name" {
   description = "Subnet Name"
   default     = "simple-subnet"
