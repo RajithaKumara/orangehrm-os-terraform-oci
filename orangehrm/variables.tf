@@ -1,18 +1,8 @@
-#Variables declared in this file must be declared in the marketplace.yaml
-#Provide a description to your variables.
-
-############################
-#  Hidden Variable Group   #
-############################
 variable "tenancy_ocid" {
 }
 
 variable "region" {
 }
-
-############################
-# Additional Configuration #
-############################
 
 variable "compartment_ocid" {
 }
@@ -61,6 +51,16 @@ variable "vm_flex_shape_memory" {
   default     = 6
 }
 
+variable "ssh_authorized_keys" {
+  description = "Public SSH keys path to be included in the ~/.ssh/authorized_keys file for the default user on the instance. "
+  default     = ""
+}
+
+variable "vm_user" {
+  description = "The SSH user to connect to the master host."
+  default     = "opc"
+}
+
 ############################
 #  Network Configuration   #
 ############################
@@ -99,12 +99,38 @@ variable "subnet_dns_label" {
   default     = "simplesubnet"
 }
 
+############################
+#  OrangeHRM
+############################
 
-variable "ssh_public_key" {
-  description = "SSH Public Key"
+variable "orangehrm_admin_user_name" {
+  default = "Admin"
 }
 
-variable "vm_user" {
-  description = "The SSH user to connect to the master host."
-  default     = "opc"
+variable "orangehrm_admin_user_password" {
+  default = "admin@123"
+}
+
+variable "orangehrm_admin_email" {
+  default = "admin@example.com"
+}
+
+variable "orangehrm_admin_firstname" {
+  default = "Admin"
+}
+
+variable "orangehrm_admin_lastname" {
+  default = "Employee"
+}
+
+variable "orangehrm_admin_contact_number" {
+  default = ""
+}
+
+variable "organization_name" {
+  default = "OrangeHRM"
+}
+
+variable "registration_consent" {
+  default = true
 }

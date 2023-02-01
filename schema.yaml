@@ -10,7 +10,6 @@ variableGroups:
     variables:
       - tenancy_ocid
       - region
-      - availability_domain_number
 
   - title: "Compute Configuration"
     variables:
@@ -20,6 +19,7 @@ variableGroups:
       - vm_flex_shape_ocpus
       - vm_flex_shape_memory
       - availability_domain_name
+      - ssh_public_key
 
   - title: "Virtual Cloud Network"
     variables:
@@ -40,9 +40,9 @@ variableGroups:
       - tag_value
 
 variables:
-######################################################
-##############    HIDDEN VARIABLES       #############
-######################################################
+  ######################################################
+  ##############    HIDDEN VARIABLES       #############
+  ######################################################
 
   tenancy_ocid:
     type: string
@@ -55,15 +55,10 @@ variables:
     title: Region
     description: The region in which to create all resources
     required: true
-  
-  availability_domain_number:
-    type: string
-    required: false
-    description: Availability Domain Number (Not used)
 
-######################################################
-##############    COMPUTE VARIABLES      #############
-######################################################
+  ######################################################
+  ##############    COMPUTE VARIABLES      #############
+  ######################################################
 
   compartment_ocid:
     type: oci:identity:compartment:id
@@ -71,7 +66,7 @@ variables:
     title: Compute Compartment
     description: The compartment in which to create all Compute resources
     default: compartment_ocid
-  
+
   tag_key_name:
     type: string
     required: true
@@ -81,7 +76,7 @@ variables:
     type: string
     required: true
     title: Tag value
-  
+
   availability_domain_name:
     type: oci:identity:availabilitydomain:name
     dependsOn:
@@ -90,6 +85,12 @@ variables:
     default: 1
     title: Availability Domain
     description: Availability Domain
+
+  ssh_public_key:
+    type: oci:core:ssh:publickey
+    required: true
+    title: Public SSH Key string
+    description: Public SSH Key to access VM via SSH
 
   vm_display_name:
     type: string
@@ -104,7 +105,7 @@ variables:
     required: true
     dependsOn:
       compartmentId: compartment_ocid
-      #Comment in to restrict to marketplace image allowed shapes 
+      #Comment in to restrict to marketplace image allowed shapes
       #imageId: mp_listing_resource_id
 
   vm_flex_shape_memory:
@@ -112,31 +113,30 @@ variables:
     required: false
     minimum: 1
     maximum: 128
-    multipleOf: 1
     default: 6
     title: "Flex Shape Memory (GB)"
     description: "Choose number GB for Flex Shape Memory."
     visible:
       and:
         - or:
-          - eq:
-            - vm_compute_shape
-            - "VM.Standard3.Flex"
-          - eq:
-            - vm_compute_shape
-            - "VM.Standard.E3.Flex"
-          - eq:
-            - vm_compute_shape
-            - "VM.Standard.E4.Flex"
-          - eq:
-            - vm_compute_shape
-            - "VM.Standard.A1.Flex"
-          - eq:
-            - vm_compute_shape
-            - "VM.DenseIO.E4.Flex"
-          - eq:
-            - vm_compute_shape
-            - "VM.Optimized3.Flex"
+            - eq:
+                - vm_compute_shape
+                - "VM.Standard3.Flex"
+            - eq:
+                - vm_compute_shape
+                - "VM.Standard.E3.Flex"
+            - eq:
+                - vm_compute_shape
+                - "VM.Standard.E4.Flex"
+            - eq:
+                - vm_compute_shape
+                - "VM.Standard.A1.Flex"
+            - eq:
+                - vm_compute_shape
+                - "VM.DenseIO.E4.Flex"
+            - eq:
+                - vm_compute_shape
+                - "VM.Optimized3.Flex"
 
   vm_flex_shape_ocpus:
     type: number
@@ -150,30 +150,30 @@ variables:
     visible:
       and:
         - or:
-          - eq:
-            - vm_compute_shape
-            - "VM.Standard3.Flex"
-          - eq:
-            - vm_compute_shape
-            - "VM.Standard.E3.Flex"
-          - eq:
-            - vm_compute_shape
-            - "VM.Standard.E4.Flex"
-          - eq:
-            - vm_compute_shape
-            - "VM.Standard.A1.Flex"
-          - eq:
-            - vm_compute_shape
-            - "VM.DenseIO.E4.Flex"
-          - eq:
-            - vm_compute_shape
-            - "VM.Optimized3.Flex"
+            - eq:
+                - vm_compute_shape
+                - "VM.Standard3.Flex"
+            - eq:
+                - vm_compute_shape
+                - "VM.Standard.E3.Flex"
+            - eq:
+                - vm_compute_shape
+                - "VM.Standard.E4.Flex"
+            - eq:
+                - vm_compute_shape
+                - "VM.Standard.A1.Flex"
+            - eq:
+                - vm_compute_shape
+                - "VM.DenseIO.E4.Flex"
+            - eq:
+                - vm_compute_shape
+                - "VM.Optimized3.Flex"
 
-######################################################
-##############     NETWORK VARIABLES     #############
-######################################################
+  ######################################################
+  ##############     NETWORK VARIABLES     #############
+  ######################################################
 
-######## VCN ########
+  ######## VCN ########
 
   vcn_display_name:
     visible: true
@@ -199,7 +199,7 @@ variables:
     maxLenght: 15
     description: VCN DNS Label. Only letters and numbers, starting with a letter. 15 characters max.
 
-######## MANAGEMENT SUBNET ########
+  ######## MANAGEMENT SUBNET ########
   subnet_display_name:
     visible: true
     type: string
@@ -234,7 +234,6 @@ outputGroups:
       - instance_public_ip
       - instance_private_ip
 
-
 #############################################
 ##############     OUTPUTS     ##############
 #############################################
@@ -250,8 +249,8 @@ outputs:
     title: Public IP
     visible: #($mgmt_subnet_type == "Public Subnet")
       eq:
-      - mgmt_subnet_type
-      - "Public Subnet"
+        - mgmt_subnet_type
+        - "Public Subnet"
 
   instance_private_ip:
     type: link

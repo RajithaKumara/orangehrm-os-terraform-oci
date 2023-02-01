@@ -52,3 +52,29 @@ resource "oci_core_route_table_attachment" "route_table_attachment" {
   subnet_id      = oci_core_subnet.simple_subnet[count.index].id
   route_table_id = oci_core_route_table.simple_route_table[count.index].id
 }
+
+data "oci_core_vnic_attachments" "orangehrm_vnics" {
+  depends_on          = [oci_core_instance.orangehrm]
+  compartment_id      = var.compartment_ocid
+  availability_domain = local.availability_domain
+  instance_id         = oci_core_instance.orangehrm.id
+}
+
+data "oci_core_vnic" "orangehrm_vnic1" {
+  depends_on = [oci_core_instance.orangehrm]
+  vnic_id    = data.oci_core_vnic_attachments.orangehrm_vnics.vnic_attachments[0]["vnic_id"]
+}
+
+data "oci_core_private_ips" "orangehrm_private_ips1" {
+  depends_on = [oci_core_instance.orangehrm]
+  vnic_id    = data.oci_core_vnic.orangehrm_vnic1.id
+  subnet_id  = oci_core_subnet.simple_subnet[0].id
+}
+
+resource "oci_core_public_ip" "orangehrm_public_ip_for_single_node" {
+  depends_on     = [oci_core_instance.orangehrm]
+  compartment_id = var.compartment_ocid
+  display_name   = "orangehrm_public_ip_for_single_node"
+  lifetime       = "RESERVED"
+  private_ip_id  = data.oci_core_private_ips.orangehrm_private_ips1.private_ips[0]["id"]
+}
