@@ -1,8 +1,7 @@
 locals {
   availability_domain = (var.availability_domain_name != "" ? var.availability_domain_name : data.oci_identity_availability_domain.ad.name)
 
-  # Logic to select Oracle Autonomous Linux 7 platform image (version pegged in data source filter)
-  platform_image_id = data.oci_core_images.autonomous_ol7.images[0].id
+  platform_image_id = data.oci_core_images.oracle_linux.images[0].id
 
   is_flex_shape = contains(local.compute_flexible_shapes, var.vm_compute_shape)
 
