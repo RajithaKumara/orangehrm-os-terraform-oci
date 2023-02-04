@@ -18,21 +18,6 @@ data "oci_core_images" "autonomous_ol7" {
   }
 }
 
-data "template_file" "install_orangehrm" {
-  template = file("${path.module}/scripts/install.sh")
-
-  vars = {
-    admin_user_name      = var.orangehrm_admin_user_name
-    admin_user_password  = var.orangehrm_admin_user_password
-    admin_email          = var.orangehrm_admin_email
-    admin_firstname      = var.orangehrm_admin_firstname
-    admin_lastname       = var.orangehrm_admin_lastname
-    admin_contact_number = var.orangehrm_admin_contact_number
-    organization_name    = var.organization_name
-    registration_consent = var.registration_consent
-  }
-}
-
 data "template_file" "install_php" {
   template = file("${path.module}/scripts/install_php74.sh")
 }

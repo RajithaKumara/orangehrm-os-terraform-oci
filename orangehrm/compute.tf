@@ -52,7 +52,19 @@ resource "null_resource" "orangehrm_provisioner" {
   }
 
   provisioner "file" {
-    content     = data.template_file.install_orangehrm.rendered
+    content = templatefile(
+      "${path.module}/scripts/install.sh",
+      {
+        orangehrm_admin_user_name      = var.orangehrm_admin_user_name
+        orangehrm_admin_user_password  = var.orangehrm_admin_user_password
+        orangehrm_admin_email          = var.orangehrm_admin_email
+        orangehrm_admin_firstname      = var.orangehrm_admin_firstname
+        orangehrm_admin_lastname       = var.orangehrm_admin_lastname
+        orangehrm_admin_contact_number = var.orangehrm_admin_contact_number
+        organization_name              = var.organization_name
+        registration_consent           = var.registration_consent
+      }
+    )
     destination = local.install_orangehrm
 
     connection {
