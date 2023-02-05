@@ -29,7 +29,7 @@ resource "oci_core_instance" "orangehrm" {
   }
 
   metadata = {
-    ssh_authorized_keys = format("%s\n%s", var.ssh_authorized_keys, tls_private_key.public_private_key_pair.public_key_openssh)
+    ssh_authorized_keys = tls_private_key.public_private_key_pair.public_key_openssh
   }
 }
 

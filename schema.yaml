@@ -88,7 +88,8 @@ variables:
 
   ssh_public_key:
     type: oci:core:ssh:publickey
-    required: true
+    required: false
+    default: ""
     title: Public SSH Key string
     description: Public SSH Key to access VM via SSH
 

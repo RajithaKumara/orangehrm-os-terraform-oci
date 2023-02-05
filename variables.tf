@@ -102,6 +102,7 @@ variable "subnet_dns_label" {
 
 variable "ssh_public_key" {
   description = "SSH Public Key"
+  default     = ""
 }
 
 variable "vm_user" {
