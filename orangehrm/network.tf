@@ -71,10 +71,49 @@ data "oci_core_private_ips" "orangehrm_private_ips1" {
   subnet_id  = oci_core_subnet.simple_subnet[0].id
 }
 
-resource "oci_core_public_ip" "orangehrm_public_ip_for_single_node" {
-  depends_on     = [oci_core_instance.orangehrm]
+# Security
+resource "oci_core_security_list" "public_security_list_ssh" {
   compartment_id = var.compartment_ocid
-  display_name   = "orangehrm_public_ip_for_single_node"
-  lifetime       = "RESERVED"
-  private_ip_id  = data.oci_core_private_ips.orangehrm_private_ips1.private_ips[0]["id"]
+  display_name   = "Allow Public SSH Connections"
+  vcn_id         = oci_core_vcn.simple[0].id
+  egress_security_rules {
+    destination = "0.0.0.0/0"
+    protocol    = "6"
+  }
+  ingress_security_rules {
+    tcp_options {
+      max = 22
+      min = 22
+    }
+    protocol = "6"
+    source   = "0.0.0.0/0"
+  }
+}
+
+resource "oci_core_security_list" "public_security_list_http" {
+  compartment_id = var.compartment_ocid
+  display_name   = "Allow HTTP(S)"
+  vcn_id         = oci_core_vcn.simple[0].id
+  egress_security_rules {
+    destination = "0.0.0.0/0"
+    protocol    = "6"
+  }
+  ingress_security_rules {
+    tcp_options {
+      max = 80
+      min = 80
+    }
+    protocol  = "6"
+    source    = "0.0.0.0/0"
+    stateless = true
+  }
+  ingress_security_rules {
+    tcp_options {
+      max = 443
+      min = 443
+    }
+    protocol  = "6"
+    source    = "0.0.0.0/0"
+    stateless = true
+  }
 }
