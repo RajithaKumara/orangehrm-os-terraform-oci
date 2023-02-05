@@ -24,18 +24,17 @@ resource "oci_core_instance" "orangehrm" {
   create_vnic_details {
     subnet_id              = local.use_existing_network ? var.subnet_id : oci_core_subnet.simple_subnet[0].id
     display_name           = var.subnet_display_name
-    assign_public_ip       = local.is_public_subnet
+    assign_public_ip       = local.is_public_subnet # TODO
     skip_source_dest_check = false
   }
 
   metadata = {
-    ssh_authorized_keys = var.ssh_authorized_keys
-    user_data           = data.template_cloudinit_config.cloud_init.rendered
+    ssh_authorized_keys = format("%s\n%s", var.ssh_authorized_keys, tls_private_key.public_private_key_pair.public_key_openssh)
   }
 }
 
 resource "null_resource" "orangehrm_provisioner" {
-  depends_on = [oci_core_instance.orangehrm, oci_core_public_ip.orangehrm_public_ip_for_single_node]
+  depends_on = [oci_core_instance.orangehrm]
 
   provisioner "file" {
     content     = data.template_file.install_php.rendered
@@ -43,7 +42,7 @@ resource "null_resource" "orangehrm_provisioner" {
 
     connection {
       type        = "ssh"
-      host        = oci_core_public_ip.orangehrm_public_ip_for_single_node.ip_address
+      host        = oci_core_instance.orangehrm.public_ip
       agent       = false
       timeout     = "5m"
       user        = var.vm_user
@@ -69,7 +68,7 @@ resource "null_resource" "orangehrm_provisioner" {
 
     connection {
       type        = "ssh"
-      host        = oci_core_public_ip.orangehrm_public_ip_for_single_node.ip_address
+      host        = oci_core_instance.orangehrm.public_ip
       agent       = false
       timeout     = "5m"
       user        = var.vm_user
@@ -80,7 +79,7 @@ resource "null_resource" "orangehrm_provisioner" {
   provisioner "remote-exec" {
     connection {
       type        = "ssh"
-      host        = oci_core_public_ip.orangehrm_public_ip_for_single_node.ip_address
+      host        = oci_core_instance.orangehrm.public_ip
       agent       = false
       timeout     = "5m"
       user        = var.vm_user

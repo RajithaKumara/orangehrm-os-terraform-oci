@@ -27,7 +27,7 @@ resource "oci_core_subnet" "simple_subnet" {
   vcn_id                     = oci_core_vcn.simple[count.index].id
   display_name               = var.subnet_display_name
   dns_label                  = substr(var.subnet_dns_label, 0, 15)
-  prohibit_public_ip_on_vnic = !local.is_public_subnet
+  prohibit_public_ip_on_vnic = !local.is_public_subnet # TODO
 
   freeform_tags = { (var.tag_key_name) = (var.tag_value) }
 }
@@ -63,20 +63,6 @@ data "oci_core_vnic_attachments" "orangehrm_vnics" {
 data "oci_core_vnic" "orangehrm_vnic1" {
   depends_on = [oci_core_instance.orangehrm]
   vnic_id    = data.oci_core_vnic_attachments.orangehrm_vnics.vnic_attachments[0]["vnic_id"]
-}
-
-data "oci_core_private_ips" "orangehrm_private_ips1" {
-  depends_on = [oci_core_instance.orangehrm]
-  vnic_id    = data.oci_core_vnic.orangehrm_vnic1.id
-  subnet_id  = oci_core_subnet.simple_subnet[0].id
-}
-
-resource "oci_core_public_ip" "orangehrm_public_ip_for_single_node" {
-  depends_on     = [oci_core_instance.orangehrm]
-  compartment_id = var.compartment_ocid
-  display_name   = "orangehrm_public_ip_for_single_node"
-  lifetime       = "RESERVED"
-  private_ip_id  = data.oci_core_private_ips.orangehrm_private_ips1.private_ips[0]["id"]
 }
 
 # Security
