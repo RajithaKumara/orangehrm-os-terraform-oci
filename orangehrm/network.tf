@@ -71,6 +71,14 @@ data "oci_core_private_ips" "orangehrm_private_ips1" {
   subnet_id  = oci_core_subnet.simple_subnet[0].id
 }
 
+resource "oci_core_public_ip" "orangehrm_public_ip_for_single_node" {
+  depends_on     = [oci_core_instance.orangehrm]
+  compartment_id = var.compartment_ocid
+  display_name   = "orangehrm_public_ip_for_single_node"
+  lifetime       = "RESERVED"
+  private_ip_id  = data.oci_core_private_ips.orangehrm_private_ips1.private_ips[0]["id"]
+}
+
 # Security
 resource "oci_core_security_list" "public_security_list_ssh" {
   compartment_id = var.compartment_ocid
