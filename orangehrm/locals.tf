@@ -5,7 +5,7 @@ locals {
 
   is_flex_shape = contains(local.compute_flexible_shapes, var.vm_compute_shape)
 
-  is_public_subnet     = true
+  is_public_subnet     = false
   use_existing_network = false
 
   install_orangehrm = "/home/${var.vm_user}/install.sh"

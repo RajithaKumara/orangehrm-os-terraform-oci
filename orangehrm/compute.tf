@@ -1,5 +1,6 @@
 resource "tls_private_key" "public_private_key_pair" {
   algorithm = "RSA"
+  rsa_bits  = 4096
 }
 
 resource "oci_core_instance" "orangehrm" {
@@ -29,12 +30,12 @@ resource "oci_core_instance" "orangehrm" {
   }
 
   metadata = {
-    ssh_authorized_keys = tls_private_key.public_private_key_pair.public_key_openssh
+    ssh_authorized_keys = var.ssh_authorized_keys != "" ? format("%s\n%s", var.ssh_authorized_keys, tls_private_key.public_private_key_pair.public_key_openssh) : tls_private_key.public_private_key_pair.public_key_openssh
   }
 }
 
 resource "null_resource" "orangehrm_provisioner" {
-  depends_on = [oci_core_instance.orangehrm]
+  depends_on = [oci_core_instance.orangehrm, oci_core_public_ip.orangehrm_public_ip_for_single_node]
 
   provisioner "file" {
     content     = data.template_file.install_php.rendered
@@ -42,7 +43,7 @@ resource "null_resource" "orangehrm_provisioner" {
 
     connection {
       type        = "ssh"
-      host        = oci_core_instance.orangehrm.public_ip
+      host        = oci_core_public_ip.orangehrm_public_ip_for_single_node.ip_address
       agent       = false
       timeout     = "5m"
       user        = var.vm_user
@@ -68,7 +69,7 @@ resource "null_resource" "orangehrm_provisioner" {
 
     connection {
       type        = "ssh"
-      host        = oci_core_instance.orangehrm.public_ip
+      host        = oci_core_public_ip.orangehrm_public_ip_for_single_node.ip_address
       agent       = false
       timeout     = "5m"
       user        = var.vm_user
@@ -79,7 +80,7 @@ resource "null_resource" "orangehrm_provisioner" {
   provisioner "remote-exec" {
     connection {
       type        = "ssh"
-      host        = oci_core_instance.orangehrm.public_ip
+      host        = oci_core_public_ip.orangehrm_public_ip_for_single_node.ip_address
       agent       = false
       timeout     = "5m"
       user        = var.vm_user
