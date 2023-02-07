@@ -1,11 +1,10 @@
 locals {
   availability_domain = (var.availability_domain_name != "" ? var.availability_domain_name : data.oci_identity_availability_domain.ad.name)
 
-  platform_image_id = data.oci_core_images.oracle_linux.images[0].id
+  platform_image_id = data.oci_core_images.autonomous_ol7.images[0].id
 
   is_flex_shape = contains(local.compute_flexible_shapes, var.vm_compute_shape)
 
-  is_public_subnet     = false
   use_existing_network = false
 
   install_orangehrm = "/home/${var.vm_user}/install.sh"

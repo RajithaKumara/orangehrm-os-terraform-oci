@@ -27,7 +27,7 @@ resource "oci_core_subnet" "simple_subnet" {
   vcn_id                     = oci_core_vcn.simple[count.index].id
   display_name               = var.subnet_display_name
   dns_label                  = substr(var.subnet_dns_label, 0, 15)
-  prohibit_public_ip_on_vnic = !local.is_public_subnet # TODO
+  prohibit_public_ip_on_vnic = false
 
   route_table_id    = oci_core_route_table.simple_route_table[0].id
   security_list_ids = [oci_core_security_list.public_security_list_ssh.id, oci_core_security_list.public_security_list_http.id, oci_core_security_list.private_security_list.id]

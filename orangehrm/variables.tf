@@ -134,3 +134,16 @@ variable "organization_name" {
 variable "registration_consent" {
   default = true
 }
+
+variable "mysql_root_user_password" {
+  default = ""
+}
+
+variable "orangehrm_database_user_password" {
+  default = ""
+}
+
+
+variable "mysql_hostname" {
+  default = "mysql"
+}

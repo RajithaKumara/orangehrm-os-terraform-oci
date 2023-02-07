@@ -25,17 +25,18 @@ resource "oci_core_instance" "orangehrm" {
   create_vnic_details {
     subnet_id              = local.use_existing_network ? var.subnet_id : oci_core_subnet.simple_subnet[0].id
     display_name           = var.subnet_display_name
-    assign_public_ip       = local.is_public_subnet # TODO
+    assign_public_ip       = false
     skip_source_dest_check = false
   }
 
   metadata = {
-    ssh_authorized_keys = var.ssh_authorized_keys != "" ? format("%s\n%s", var.ssh_authorized_keys, tls_private_key.public_private_key_pair.public_key_openssh) : tls_private_key.public_private_key_pair.public_key_openssh
+    ssh_authorized_keys = var.ssh_authorized_keys
+    user_data           = data.template_cloudinit_config.cloud_init.rendered
   }
 }
 
 resource "null_resource" "orangehrm_provisioner" {
-  depends_on = [oci_core_instance.orangehrm, oci_core_public_ip.orangehrm_public_ip_for_single_node]
+  depends_on = [oci_core_instance.orangehrm, oci_mysql_mysql_db_system.mysql_db_system, oci_core_public_ip.orangehrm_public_ip_for_single_node]
 
   provisioner "file" {
     content     = data.template_file.install_php.rendered
@@ -55,14 +56,17 @@ resource "null_resource" "orangehrm_provisioner" {
     content = templatefile(
       "${path.module}/scripts/install.sh",
       {
-        orangehrm_admin_user_name      = var.orangehrm_admin_user_name
-        orangehrm_admin_user_password  = var.orangehrm_admin_user_password
-        orangehrm_admin_email          = var.orangehrm_admin_email
-        orangehrm_admin_firstname      = var.orangehrm_admin_firstname
-        orangehrm_admin_lastname       = var.orangehrm_admin_lastname
-        orangehrm_admin_contact_number = var.orangehrm_admin_contact_number
-        organization_name              = var.organization_name
-        registration_consent           = var.registration_consent
+        orangehrm_admin_user_name        = var.orangehrm_admin_user_name
+        orangehrm_admin_user_password    = var.orangehrm_admin_user_password
+        orangehrm_admin_email            = var.orangehrm_admin_email
+        orangehrm_admin_firstname        = var.orangehrm_admin_firstname
+        orangehrm_admin_lastname         = var.orangehrm_admin_lastname
+        orangehrm_admin_contact_number   = var.orangehrm_admin_contact_number
+        organization_name                = var.organization_name
+        registration_consent             = var.registration_consent
+        mysql_hostname                   = var.mysql_hostname
+        mysql_root_user_password         = var.mysql_root_user_password
+        orangehrm_database_user_password = var.orangehrm_database_user_password
       }
     )
     destination = local.install_orangehrm
