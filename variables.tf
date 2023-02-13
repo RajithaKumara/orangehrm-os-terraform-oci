@@ -27,6 +27,45 @@ variable "tag_value" {
   default     = "OrangeHRM"
 }
 
+
+############################
+# OrangeHRM Configuration  #
+############################
+
+variable "instance_organization_name" {
+}
+
+variable "instance_country" {
+}
+
+variable "instance_language" {
+  default = ""
+}
+
+variable "orangehrm_admin_firstname" {
+}
+
+variable "orangehrm_admin_lastname" {
+}
+
+variable "orangehrm_admin_email" {
+}
+
+variable "orangehrm_admin_contact_number" {
+  default = ""
+}
+
+variable "orangehrm_admin_user_name" {
+  default = "Admin"
+}
+
+variable "orangehrm_admin_user_password" {
+}
+
+variable "registration_consent" {
+  default = true
+}
+
 ############################
 #  Compute Configuration   #
 ############################

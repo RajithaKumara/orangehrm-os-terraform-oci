@@ -1,5 +1,7 @@
-title: Sample Marketplace Stack / ORM Application
-description: This is a Sample Marketplace Stack / ORM Application
+# https://docs.oracle.com/en-us/iaas/Content/ResourceManager/Concepts/terraformconfigresourcemanager_topic-schema.htm
+
+title: Deploy OrangeHRM Starter on OCI with MDS
+description: Deploy OrangeHRM Starter (Open Source) on OCI with MySQL Database Service
 schemaVersion: 1.1.0
 version: "20230127"
 
@@ -10,6 +12,22 @@ variableGroups:
     variables:
       - tenancy_ocid
       - region
+
+  - title: "OrangeHRM: Instance Creation"
+    variables:
+      - instance_organization_name
+      - instance_country
+      - instance_language
+
+  - title: "OrangeHRM: Admin User Creation"
+    variables:
+      - orangehrm_admin_firstname
+      - orangehrm_admin_lastname
+      - orangehrm_admin_email
+      - orangehrm_admin_contact_number
+      - orangehrm_admin_user_name
+      - orangehrm_admin_user_password
+      - registration_consent
 
   - title: "Compute Configuration"
     variables:
@@ -55,6 +73,67 @@ variables:
     title: Region
     description: The region in which to create all resources
     required: true
+
+  ######################################################
+  #########    OrangeHRM: Instance Creation      #######
+  ######################################################
+
+  instance_organization_name:
+    type: string
+    required: true
+    title: Organization Name
+
+  instance_country:
+    type: array
+    required: true
+    title: Country
+
+  instance_language:
+    type: string
+    required: false
+    title: Language
+
+  ######################################################
+  #########    OrangeHRM: Admin User Creation      #######
+  ######################################################
+
+  orangehrm_admin_firstname:
+    type: string
+    required: true
+    title: First Name
+
+  orangehrm_admin_lastname:
+    type: string
+    required: true
+    title: Last Name
+
+  orangehrm_admin_email:
+    type: string
+    required: true
+    title: Email
+
+  orangehrm_admin_contact_number:
+    type: string
+    required: false
+    title: Contact Number
+
+  orangehrm_admin_user_name:
+    type: string
+    required: true
+    title: Admin Username
+
+  orangehrm_admin_user_password:
+    type: password
+    required: true
+    title: Password
+    confirmation: true
+
+  registration_consent:
+    type: boolean
+    required: true
+    title: Register your system with OrangeHRM
+    description: By registering, You will be eligible for free support via emails, receive security alerts and news letters from OrangeHRM.
+    default: true
 
   ######################################################
   ##############    COMPUTE VARIABLES      #############
@@ -106,8 +185,6 @@ variables:
     required: true
     dependsOn:
       compartmentId: compartment_ocid
-      #Comment in to restrict to marketplace image allowed shapes
-      #imageId: mp_listing_resource_id
 
   vm_flex_shape_memory:
     type: number
