@@ -13,13 +13,23 @@ variableGroups:
       - tenancy_ocid
       - region
 
+  # - title: "OrangeHRM: License Acceptance"
+  #   variables:
+  #     - license_acceptance
+
   - title: "OrangeHRM: Instance Creation"
+    # visible:
+    #   and:
+    #     - license_acceptance
     variables:
       - instance_organization_name
       - instance_country
       - instance_language
 
   - title: "OrangeHRM: Admin User Creation"
+    # visible:
+    #   and:
+    #     - license_acceptance
     variables:
       - orangehrm_admin_firstname
       - orangehrm_admin_lastname
@@ -75,6 +85,18 @@ variables:
     required: true
 
   ######################################################
+  #########    OrangeHRM: License Acceptance      ######
+  ######################################################
+
+  license_acceptance:
+    type: boolean
+    required: true
+    title: License Acceptance
+    description: I accept the terms in the [License Agreement](https://github.com/orangehrm/orangehrm/blob/main/LICENSE)
+    default: true
+    disable: true
+
+  ######################################################
   #########    OrangeHRM: Instance Creation      #######
   ######################################################
 
@@ -94,7 +116,7 @@ variables:
     title: Language
 
   ######################################################
-  #########    OrangeHRM: Admin User Creation      #######
+  ########    OrangeHRM: Admin User Creation      ######
   ######################################################
 
   orangehrm_admin_firstname:

@@ -6,6 +6,7 @@ Limitation:
 - Only supporting `Oracle Autonomous Linux` image
 - Cannot use existing MySQL Database Service (MDS)
 - Can provision resources only within a single compartment
+- Cannot use existing VCN
 
 Known issues:
 - Setting up LDAP

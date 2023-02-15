@@ -23,12 +23,7 @@ variable "tag_value" {
 
 variable "availability_domain_name" {
   default     = ""
-  description = "Availability Domain name, if non-empty takes precedence over availability_domain_number"
-}
-
-variable "availability_domain_number" {
-  default     = 1
-  description = "OCI Availability Domains: 1,2,3  (subject to region availability)"
+  description = "Availability Domain name"
 }
 
 variable "vm_display_name" {
@@ -65,38 +60,13 @@ variable "vm_user" {
 #  Network Configuration   #
 ############################
 
-variable "vcn_display_name" {
-  description = "VCN Name"
-  default     = "simple-vcn"
-}
-
-variable "vcn_cidr_block" {
-  description = "VCN CIDR"
-  default     = "10.0.0.0/16"
-}
-
-variable "vcn_dns_label" {
-  description = "VCN DNS Label"
-  default     = "simplevcn"
-}
-
 variable "subnet_id" {
-  default = ""
+}
+
+variable "vcn_id" {
 }
 
 variable "subnet_display_name" {
-  description = "Subnet Name"
-  default     = "simple-subnet"
-}
-
-variable "subnet_cidr_block" {
-  description = "Subnet CIDR"
-  default     = "10.0.0.0/24"
-}
-
-variable "subnet_dns_label" {
-  description = "Subnet DNS Label"
-  default     = "simplesubnet"
 }
 
 ############################
@@ -108,19 +78,15 @@ variable "orangehrm_admin_user_name" {
 }
 
 variable "orangehrm_admin_user_password" {
-  default = "admin@123"
 }
 
 variable "orangehrm_admin_email" {
-  default = "admin@example.com"
 }
 
 variable "orangehrm_admin_firstname" {
-  default = "Admin"
 }
 
 variable "orangehrm_admin_lastname" {
-  default = "Employee"
 }
 
 variable "orangehrm_admin_contact_number" {
@@ -128,22 +94,24 @@ variable "orangehrm_admin_contact_number" {
 }
 
 variable "organization_name" {
-  default = "OrangeHRM"
 }
 
 variable "registration_consent" {
   default = true
 }
 
+############################
+############   MDS   #######
+############################
+
 variable "mysql_root_user_password" {
-  default = ""
 }
 
 variable "orangehrm_database_user_password" {
-  default = ""
 }
 
-
 variable "mysql_hostname" {
-  default = "mysql"
+}
+
+variable "mds_ip" {
 }

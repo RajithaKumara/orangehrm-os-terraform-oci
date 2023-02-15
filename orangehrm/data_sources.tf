@@ -1,8 +1,3 @@
-data "oci_identity_availability_domain" "ad" {
-  compartment_id = var.tenancy_ocid
-  ad_number      = var.availability_domain_number
-}
-
 data "oci_core_images" "autonomous_ol7" {
   compartment_id   = var.compartment_ocid
   operating_system = "Oracle Autonomous Linux"
@@ -38,4 +33,22 @@ data "template_cloudinit_config" "cloud_init" {
     content_type = "text/x-shellscript"
     content      = data.template_file.key_script.rendered
   }
+}
+
+data "oci_core_vnic_attachments" "orangehrm_vnics" {
+  depends_on          = [oci_core_instance.orangehrm]
+  compartment_id      = var.compartment_ocid
+  availability_domain = var.availability_domain_name
+  instance_id         = oci_core_instance.orangehrm.id
+}
+
+data "oci_core_vnic" "orangehrm_vnic1" {
+  depends_on = [oci_core_instance.orangehrm]
+  vnic_id    = data.oci_core_vnic_attachments.orangehrm_vnics.vnic_attachments[0]["vnic_id"]
+}
+
+data "oci_core_private_ips" "orangehrm_private_ips1" {
+  depends_on = [oci_core_instance.orangehrm]
+  vnic_id    = data.oci_core_vnic.orangehrm_vnic1.id
+  subnet_id  = var.subnet_id
 }

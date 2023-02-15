@@ -1,6 +1,3 @@
-#Variables declared in this file must be declared in the marketplace.yaml
-#Provide a description to your variables.
-
 ############################
 #  Hidden Variable Group   #
 ############################
@@ -82,7 +79,7 @@ variable "availability_domain_number" {
 
 variable "vm_display_name" {
   description = "Instance Name"
-  default     = "simple-vm"
+  default     = "orangehrm-vm"
 }
 
 variable "vm_compute_shape" {
@@ -106,7 +103,7 @@ variable "vm_flex_shape_memory" {
 
 variable "vcn_display_name" {
   description = "VCN Name"
-  default     = "simple-vcn"
+  default     = "orangehrm-vcn"
 }
 
 variable "vcn_cidr_block" {
@@ -116,16 +113,12 @@ variable "vcn_cidr_block" {
 
 variable "vcn_dns_label" {
   description = "VCN DNS Label"
-  default     = "simplevcn"
-}
-
-variable "subnet_id" {
-  default = ""
+  default     = "orangehrm-vcn"
 }
 
 variable "subnet_display_name" {
   description = "Subnet Name"
-  default     = "simple-subnet"
+  default     = "orangehrm-subnet"
 }
 
 variable "subnet_cidr_block" {
@@ -135,7 +128,7 @@ variable "subnet_cidr_block" {
 
 variable "subnet_dns_label" {
   description = "Subnet DNS Label"
-  default     = "simplesubnet"
+  default     = "orangehrm-subnet"
 }
 
 
@@ -148,3 +141,20 @@ variable "vm_user" {
   description = "The SSH user to connect to the master host."
   default     = "opc"
 }
+
+############################
+############   MDS   #######
+############################
+
+variable "mysql_root_user_password" {
+  default = "admin@OHRM123"
+}
+
+variable "orangehrm_database_user_password" {
+  default = "admin@OHRM123"
+}
+
+variable "mysql_hostname" {
+  default = "mysql"
+}
+

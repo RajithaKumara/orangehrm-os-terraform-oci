@@ -4,7 +4,7 @@ resource "tls_private_key" "public_private_key_pair" {
 }
 
 resource "oci_core_instance" "orangehrm" {
-  availability_domain = local.availability_domain
+  availability_domain = var.availability_domain_name
   compartment_id      = var.compartment_ocid
   display_name        = var.vm_display_name
   shape               = var.vm_compute_shape
@@ -23,7 +23,7 @@ resource "oci_core_instance" "orangehrm" {
   }
 
   create_vnic_details {
-    subnet_id              = local.use_existing_network ? var.subnet_id : oci_core_subnet.simple_subnet[0].id
+    subnet_id              = var.subnet_id
     display_name           = var.subnet_display_name
     assign_public_ip       = false
     skip_source_dest_check = false
@@ -36,7 +36,7 @@ resource "oci_core_instance" "orangehrm" {
 }
 
 resource "null_resource" "orangehrm_provisioner" {
-  depends_on = [oci_core_instance.orangehrm, oci_mysql_mysql_db_system.mysql_db_system, oci_core_public_ip.orangehrm_public_ip_for_single_node]
+  depends_on = [oci_core_instance.orangehrm, oci_core_public_ip.orangehrm_public_ip_for_single_node]
 
   provisioner "file" {
     content     = data.template_file.install_php.rendered
@@ -99,4 +99,12 @@ resource "null_resource" "orangehrm_provisioner" {
     ]
 
   }
+}
+
+resource "oci_core_public_ip" "orangehrm_public_ip_for_single_node" {
+  depends_on     = [oci_core_instance.orangehrm]
+  compartment_id = var.compartment_ocid
+  display_name   = "orangehrm_public_ip_for_single_node"
+  lifetime       = "RESERVED"
+  private_ip_id  = data.oci_core_private_ips.orangehrm_private_ips1.private_ips[0]["id"]
 }

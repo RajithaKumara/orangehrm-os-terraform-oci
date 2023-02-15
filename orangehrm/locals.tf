@@ -1,11 +1,7 @@
 locals {
-  availability_domain = (var.availability_domain_name != "" ? var.availability_domain_name : data.oci_identity_availability_domain.ad.name)
-
   platform_image_id = data.oci_core_images.autonomous_ol7.images[0].id
 
   is_flex_shape = contains(local.compute_flexible_shapes, var.vm_compute_shape)
-
-  use_existing_network = false
 
   install_orangehrm = "/home/${var.vm_user}/install.sh"
   php_script        = "/home/${var.vm_user}/install_php74.sh"
