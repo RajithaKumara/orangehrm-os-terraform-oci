@@ -96,6 +96,13 @@ variable "orangehrm_admin_contact_number" {
 variable "organization_name" {
 }
 
+variable "country" {
+}
+
+variable "language" {
+  default = ""
+}
+
 variable "registration_consent" {
   default = true
 }
@@ -104,13 +111,21 @@ variable "registration_consent" {
 ############   MDS   #######
 ############################
 
-variable "mysql_root_user_password" {
+variable "privileged_database_user_password" {
+}
+
+variable "privileged_database_username" {
+  default = "root"
+}
+
+variable "database_name" {
+  default = "orangehrm"
 }
 
 variable "orangehrm_database_user_password" {
 }
 
-variable "mysql_hostname" {
+variable "database_hostname" {
 }
 
 variable "mds_ip" {

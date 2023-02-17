@@ -56,20 +56,39 @@ resource "null_resource" "orangehrm_provisioner" {
     content = templatefile(
       "${path.module}/scripts/install.sh",
       {
-        orangehrm_admin_user_name        = var.orangehrm_admin_user_name
-        orangehrm_admin_user_password    = var.orangehrm_admin_user_password
-        orangehrm_admin_email            = var.orangehrm_admin_email
-        orangehrm_admin_firstname        = var.orangehrm_admin_firstname
-        orangehrm_admin_lastname         = var.orangehrm_admin_lastname
-        orangehrm_admin_contact_number   = var.orangehrm_admin_contact_number
-        organization_name                = var.organization_name
-        registration_consent             = var.registration_consent
-        mysql_hostname                   = var.mysql_hostname
-        mysql_root_user_password         = var.mysql_root_user_password
-        orangehrm_database_user_password = var.orangehrm_database_user_password
+        orangehrm_admin_user_name         = var.orangehrm_admin_user_name
+        orangehrm_admin_user_password     = var.orangehrm_admin_user_password
+        orangehrm_admin_email             = var.orangehrm_admin_email
+        orangehrm_admin_firstname         = var.orangehrm_admin_firstname
+        orangehrm_admin_lastname          = var.orangehrm_admin_lastname
+        orangehrm_admin_contact_number    = var.orangehrm_admin_contact_number
+        organization_name                 = var.organization_name
+        country                           = var.country
+        language                          = var.language
+        registration_consent              = var.registration_consent
+        database_hostname                 = var.database_hostname
+        privileged_database_user_password = var.privileged_database_user_password
+        privileged_database_username      = var.privileged_database_username
+        database_name                     = var.database_name
+        mds_ip                            = var.mds_ip
+        orangehrm_database_user_password  = var.orangehrm_database_user_password
       }
     )
     destination = local.install_orangehrm
+
+    connection {
+      type        = "ssh"
+      host        = oci_core_public_ip.orangehrm_public_ip_for_single_node.ip_address
+      agent       = false
+      timeout     = "5m"
+      user        = var.vm_user
+      private_key = tls_private_key.public_private_key_pair.private_key_pem
+    }
+  }
+
+  provisioner "file" {
+    content     = file("${path.module}/scripts/orangehrm.conf")
+    destination = local.apache_orangehrm_conf
 
     connection {
       type        = "ssh"
@@ -95,7 +114,11 @@ resource "null_resource" "orangehrm_provisioner" {
       "chmod +x ${local.php_script}",
       "sudo ${local.php_script}",
       "chmod +x ${local.install_orangehrm}",
-      "sudo ${local.install_orangehrm}"
+      "sudo ${local.install_orangehrm}",
+      "sudo mv ${local.apache_orangehrm_conf} /etc/httpd/conf.d/orangehrm.conf",
+      "sudo chown root:root /etc/httpd/conf.d/orangehrm.conf",
+      "sudo chcon -v -t httpd_sys_rw_content_t /etc/httpd/conf.d/orangehrm.conf",
+      "sudo systemctl restart httpd"
     ]
 
   }

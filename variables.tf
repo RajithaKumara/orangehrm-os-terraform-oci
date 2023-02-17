@@ -113,7 +113,7 @@ variable "vcn_cidr_block" {
 
 variable "vcn_dns_label" {
   description = "VCN DNS Label"
-  default     = "orangehrm-vcn"
+  default     = "orangehrmvcn"
 }
 
 variable "subnet_display_name" {
@@ -128,7 +128,7 @@ variable "subnet_cidr_block" {
 
 variable "subnet_dns_label" {
   description = "Subnet DNS Label"
-  default     = "orangehrm-subnet"
+  default     = "orangehrmsubnet"
 }
 
 
@@ -143,18 +143,30 @@ variable "vm_user" {
 }
 
 ############################
-############   MDS   #######
+#######      MDS     #######
 ############################
 
-variable "mysql_root_user_password" {
+variable "privileged_database_user_password" {
   default = "admin@OHRM123"
+}
+
+variable "privileged_database_username" {
+  default = "root"
+}
+
+variable "database_name" {
+  default = "orangehrm"
 }
 
 variable "orangehrm_database_user_password" {
   default = "admin@OHRM123"
 }
 
-variable "mysql_hostname" {
+variable "database_hostname" {
   default = "mysql"
+}
+
+variable "mysql_shape" {
+  default = "MySQL.VM.Standard.E3.1.8GB"
 }
 

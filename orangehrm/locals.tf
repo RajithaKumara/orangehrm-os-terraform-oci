@@ -3,8 +3,9 @@ locals {
 
   is_flex_shape = contains(local.compute_flexible_shapes, var.vm_compute_shape)
 
-  install_orangehrm = "/home/${var.vm_user}/install.sh"
-  php_script        = "/home/${var.vm_user}/install_php74.sh"
+  install_orangehrm     = "/home/${var.vm_user}/install.sh"
+  php_script            = "/home/${var.vm_user}/install_php74.sh"
+  apache_orangehrm_conf = "/home/${var.vm_user}/orangehrm.conf"
 }
 
 locals {

@@ -12,24 +12,20 @@ variableGroups:
     variables:
       - tenancy_ocid
       - region
+      - vm_user
+      - availability_domain_number
 
   # - title: "OrangeHRM: License Acceptance"
   #   variables:
   #     - license_acceptance
 
   - title: "OrangeHRM: Instance Creation"
-    # visible:
-    #   and:
-    #     - license_acceptance
     variables:
       - instance_organization_name
       - instance_country
       - instance_language
 
   - title: "OrangeHRM: Admin User Creation"
-    # visible:
-    #   and:
-    #     - license_acceptance
     variables:
       - orangehrm_admin_firstname
       - orangehrm_admin_lastname
@@ -49,18 +45,28 @@ variableGroups:
       - availability_domain_name
       - ssh_public_key
 
-  - title: "Virtual Cloud Network"
+  - title: "Virtual Cloud Network Configuration"
     variables:
       - vcn_display_name
       - vcn_dns_label
       - vcn_cidr_block
 
-  - title: "Simple Subnet"
+  - title: "Subnet Configuration"
     visible: true
     variables:
       - subnet_display_name
       - subnet_dns_label
       - subnet_cidr_block
+
+  - title: "MySQL Database Configuration"
+    visible: true
+    variables:
+      - privileged_database_user_password
+      - privileged_database_username
+      - database_name
+      - orangehrm_database_user_password
+      - database_hostname
+      - mysql_shape
 
   - title: "Additional Configuration Options"
     variables:
@@ -88,13 +94,13 @@ variables:
   #########    OrangeHRM: License Acceptance      ######
   ######################################################
 
-  license_acceptance:
-    type: boolean
-    required: true
-    title: License Acceptance
-    description: I accept the terms in the [License Agreement](https://github.com/orangehrm/orangehrm/blob/main/LICENSE)
-    default: true
-    disable: true
+  # license_acceptance:
+  #   type: boolean
+  #   required: true
+  #   title: License Acceptance
+  #   description: I accept the terms in the [License Agreement](https://github.com/orangehrm/orangehrm/blob/main/LICENSE)
+  #   default: true
+  #   disable: true
 
   ######################################################
   #########    OrangeHRM: Instance Creation      #######
@@ -106,14 +112,266 @@ variables:
     title: Organization Name
 
   instance_country:
-    type: array
+    type: enum
     required: true
     title: Country
+    enum:
+      - "Andorra"
+      - "United Arab Emirates"
+      - "Afghanistan"
+      - "Antigua and Barbuda"
+      - "Anguilla"
+      - "Albania"
+      - "Armenia"
+      - "Netherlands Antilles"
+      - "Angola"
+      - "Antarctica"
+      - "Argentina"
+      - "American Samoa"
+      - "Austria"
+      - "Australia"
+      - "Aruba"
+      - "Azerbaijan"
+      - "Bosnia and Herzegovina"
+      - "Barbados"
+      - "Bangladesh"
+      - "Belgium"
+      - "Burkina Faso"
+      - "Bulgaria"
+      - "Bahrain"
+      - "Burundi"
+      - "Benin"
+      - "Bermuda"
+      - "Brunei Darussalam"
+      - "Bolivia"
+      - "Brazil"
+      - "Bahamas"
+      - "Bhutan"
+      - "Bouvet Island"
+      - "Botswana"
+      - "Belarus"
+      - "Belize"
+      - "Canada"
+      - "Cocos (Keeling) Islands"
+      - "Congo, the Democratic Republic of the"
+      - "Central African Republic"
+      - "Congo"
+      - "Switzerland"
+      - "Cote D'Ivoire"
+      - "Cook Islands"
+      - "Chile"
+      - "Cameroon"
+      - "China"
+      - "Colombia"
+      - "Costa Rica"
+      - "Serbia and Montenegro"
+      - "Cuba"
+      - "Cape Verde"
+      - "Christmas Island"
+      - "Cyprus"
+      - "Czech Republic"
+      - "Germany"
+      - "Djibouti"
+      - "Denmark"
+      - "Dominica"
+      - "Dominican Republic"
+      - "Algeria"
+      - "Ecuador"
+      - "Estonia"
+      - "Egypt"
+      - "Western Sahara"
+      - "Eritrea"
+      - "Spain"
+      - "Ethiopia"
+      - "Finland"
+      - "Fiji"
+      - "Falkland Islands (Malvinas)"
+      - "Micronesia, Federated States of"
+      - "Faroe Islands"
+      - "France"
+      - "Gabon"
+      - "United Kingdom"
+      - "Grenada"
+      - "Georgia"
+      - "French Guiana"
+      - "Ghana"
+      - "Gibraltar"
+      - "Greenland"
+      - "Gambia"
+      - "Guinea"
+      - "Guadeloupe"
+      - "Equatorial Guinea"
+      - "Greece"
+      - "South Georgia and the South Sandwich Islands"
+      - "Guatemala"
+      - "Guam"
+      - "Guinea-Bissau"
+      - "Guyana"
+      - "Hong Kong"
+      - "Heard Island and Mcdonald Islands"
+      - "Honduras"
+      - "Croatia"
+      - "Haiti"
+      - "Hungary"
+      - "Indonesia"
+      - "Ireland"
+      - "Israel"
+      - "India"
+      - "British Indian Ocean Territory"
+      - "Iraq"
+      - "Iran, Islamic Republic of"
+      - "Iceland"
+      - "Italy"
+      - "Jamaica"
+      - "Jordan"
+      - "Japan"
+      - "Kenya"
+      - "Kyrgyzstan"
+      - "Cambodia"
+      - "Kiribati"
+      - "Comoros"
+      - "Saint Kitts and Nevis"
+      - "Korea, Democratic People's Republic of"
+      - "Korea, Republic of"
+      - "Kuwait"
+      - "Cayman Islands"
+      - "Kazakhstan"
+      - "Lao People's Democratic Republic"
+      - "Lebanon"
+      - "Saint Lucia"
+      - "Liechtenstein"
+      - "Sri Lanka"
+      - "Liberia"
+      - "Lesotho"
+      - "Lithuania"
+      - "Luxembourg"
+      - "Latvia"
+      - "Libyan Arab Jamahiriya"
+      - "Morocco"
+      - "Monaco"
+      - "Moldova, Republic of"
+      - "Madagascar"
+      - "Marshall Islands"
+      - "Macedonia, the Former Yugoslav Republic of"
+      - "Mali"
+      - "Myanmar"
+      - "Mongolia"
+      - "Macao"
+      - "Northern Mariana Islands"
+      - "Martinique"
+      - "Mauritania"
+      - "Montserrat"
+      - "Malta"
+      - "Mauritius"
+      - "Maldives"
+      - "Malawi"
+      - "Mexico"
+      - "Malaysia"
+      - "Mozambique"
+      - "Namibia"
+      - "New Caledonia"
+      - "Niger"
+      - "Norfolk Island"
+      - "Nigeria"
+      - "Nicaragua"
+      - "Netherlands"
+      - "Norway"
+      - "Nepal"
+      - "Nauru"
+      - "Niue"
+      - "New Zealand"
+      - "Oman"
+      - "Panama"
+      - "Peru"
+      - "French Polynesia"
+      - "Papua New Guinea"
+      - "Philippines"
+      - "Pakistan"
+      - "Poland"
+      - "Saint Pierre and Miquelon"
+      - "Pitcairn"
+      - "Puerto Rico"
+      - "Palestinian Territory, Occupied"
+      - "Portugal"
+      - "Palau"
+      - "Paraguay"
+      - "Qatar"
+      - "Reunion"
+      - "Romania"
+      - "Russian Federation"
+      - "Rwanda"
+      - "Saudi Arabia"
+      - "Solomon Islands"
+      - "Seychelles"
+      - "Sudan"
+      - "Sweden"
+      - "Singapore"
+      - "Saint Helena"
+      - "Slovenia"
+      - "Svalbard and Jan Mayen"
+      - "Slovakia"
+      - "Sierra Leone"
+      - "San Marino"
+      - "Senegal"
+      - "Somalia"
+      - "Suriname"
+      - "Sao Tome and Principe"
+      - "El Salvador"
+      - "Syrian Arab Republic"
+      - "Swaziland"
+      - "Turks and Caicos Islands"
+      - "Chad"
+      - "French Southern Territories"
+      - "Togo"
+      - "Thailand"
+      - "Tajikistan"
+      - "Tokelau"
+      - "Timor-Leste"
+      - "Turkmenistan"
+      - "Tunisia"
+      - "Tonga"
+      - "Turkey"
+      - "Trinidad and Tobago"
+      - "Tuvalu"
+      - "Taiwan"
+      - "Tanzania, United Republic of"
+      - "Ukraine"
+      - "Uganda"
+      - "United States Minor Outlying Islands"
+      - "United States"
+      - "Uruguay"
+      - "Uzbekistan"
+      - "Holy See (Vatican City State)"
+      - "Saint Vincent and the Grenadines"
+      - "Venezuela"
+      - "Virgin Islands, British"
+      - "Virgin Islands, U.s."
+      - "Viet Nam"
+      - "Vanuatu"
+      - "Wallis and Futuna"
+      - "Samoa"
+      - "Yemen"
+      - "Mayotte"
+      - "South Africa"
+      - "Zambia"
+      - "Zimbabwe"
+    allowMultiple: false
 
   instance_language:
-    type: string
+    type: enum
     required: false
     title: Language
+    enum:
+      - Chinese (Simplified, China) - 中文（简体，中国）
+      - Chinese (Traditional, Taiwan) - 中文（繁體，台灣）
+      - Dutch - Nederlands
+      - English (United States)
+      - French - Français
+      - German - Deutsch
+      - Spanish - Español
+      - Spanish (Costa Rica) - Español (Costa Rica)
+    default: English (United States)
+    allowMultiple: false
 
   ######################################################
   ########    OrangeHRM: Admin User Creation      ######
@@ -324,6 +582,47 @@ variables:
     maxLenght: 15
     description: Subnet DNS Label. Only letters and numbers, starting with a letter. 15 characters max.
 
+  ######################################################
+  ##############       MDS VARIABLES       #############
+  ######################################################
+
+  privileged_database_user_password:
+    type: password
+    required: false
+    title: Privileged Database User Password
+    minLenght: 8
+    description: MySQL root user password
+
+  privileged_database_username:
+    type: string
+    required: false
+    title: Privileged Database Username
+    description: "Privileged database user's username. e.g: root"
+
+  database_name:
+    type: string
+    required: false
+    title: Database name
+
+  orangehrm_database_user_password:
+    type: password
+    required: false
+    title: Database user password for the OrangeHRM application
+
+  database_hostname:
+    type: string
+    required: false
+    title: Database hostname
+    description: Database hostname label within the subnet
+  
+  mysql_shape:
+    type: string
+    visible: false
+    required: false
+    default: "MySQL.VM.Standard.E3.1.8GB"
+    title: MySQL Shape
+
+
 #############################################
 ###########    OUTPUT GROUPS     ############
 #############################################
@@ -347,10 +646,7 @@ outputs:
   instance_public_ip:
     type: link
     title: Public IP
-    visible: #($mgmt_subnet_type == "Public Subnet")
-      eq:
-        - mgmt_subnet_type
-        - "Public Subnet"
+    visible: true
 
   instance_private_ip:
     type: link
