@@ -21,9 +21,8 @@ module "orangehrm" {
   orangehrm_admin_contact_number    = var.orangehrm_admin_contact_number
   organization_name                 = var.instance_organization_name
   country                           = var.instance_country
-  language                          = var.instance_language
   registration_consent              = var.registration_consent
-  privileged_database_user_password = var.privileged_database_user_password
+  privileged_database_user_password = local.privileged_database_user_password
   database_name                     = var.database_name
   orangehrm_database_user_password  = var.orangehrm_database_user_password
   database_hostname                 = var.database_hostname

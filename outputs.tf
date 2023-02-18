@@ -13,3 +13,8 @@ output "instance_private_ip" {
 output "instance_https_url" {
   value = module.orangehrm.instance_https_url
 }
+
+output "privileged_database_user_password" {
+  value     = local.privileged_database_user_password
+  sensitive = true
+}

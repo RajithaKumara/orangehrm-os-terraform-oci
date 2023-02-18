@@ -35,10 +35,6 @@ variable "instance_organization_name" {
 variable "instance_country" {
 }
 
-variable "instance_language" {
-  default = ""
-}
-
 variable "orangehrm_admin_firstname" {
 }
 
@@ -57,6 +53,7 @@ variable "orangehrm_admin_user_name" {
 }
 
 variable "orangehrm_admin_user_password" {
+  sensitive = true
 }
 
 variable "registration_consent" {
@@ -147,7 +144,8 @@ variable "vm_user" {
 ############################
 
 variable "privileged_database_user_password" {
-  default = "admin@OHRM123"
+  default   = ""
+  sensitive = true
 }
 
 variable "privileged_database_username" {
@@ -159,7 +157,8 @@ variable "database_name" {
 }
 
 variable "orangehrm_database_user_password" {
-  default = "admin@OHRM123"
+  default   = ""
+  sensitive = true
 }
 
 variable "database_hostname" {

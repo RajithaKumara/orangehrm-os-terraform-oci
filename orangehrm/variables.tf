@@ -78,6 +78,7 @@ variable "orangehrm_admin_user_name" {
 }
 
 variable "orangehrm_admin_user_password" {
+  sensitive = true
 }
 
 variable "orangehrm_admin_email" {
@@ -99,10 +100,6 @@ variable "organization_name" {
 variable "country" {
 }
 
-variable "language" {
-  default = ""
-}
-
 variable "registration_consent" {
   default = true
 }
@@ -112,6 +109,7 @@ variable "registration_consent" {
 ############################
 
 variable "privileged_database_user_password" {
+  sensitive = true
 }
 
 variable "privileged_database_username" {
@@ -123,6 +121,8 @@ variable "database_name" {
 }
 
 variable "orangehrm_database_user_password" {
+  default   = ""
+  sensitive = true
 }
 
 variable "database_hostname" {

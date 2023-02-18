@@ -23,7 +23,6 @@ variableGroups:
     variables:
       - instance_organization_name
       - instance_country
-      - instance_language
 
   - title: "OrangeHRM: Admin User Creation"
     variables:
@@ -61,8 +60,8 @@ variableGroups:
   - title: "MySQL Database Configuration"
     visible: true
     variables:
-      - privileged_database_user_password
       - privileged_database_username
+      - privileged_database_user_password
       - database_name
       - orangehrm_database_user_password
       - database_hostname
@@ -357,22 +356,6 @@ variables:
       - "Zimbabwe"
     allowMultiple: false
 
-  instance_language:
-    type: enum
-    required: false
-    title: Language
-    enum:
-      - Chinese (Simplified, China) - 中文（简体，中国）
-      - Chinese (Traditional, Taiwan) - 中文（繁體，台灣）
-      - Dutch - Nederlands
-      - English (United States)
-      - French - Français
-      - German - Deutsch
-      - Spanish - Español
-      - Spanish (Costa Rica) - Español (Costa Rica)
-    default: English (United States)
-    allowMultiple: false
-
   ######################################################
   ########    OrangeHRM: Admin User Creation      ######
   ######################################################
@@ -607,7 +590,8 @@ variables:
   orangehrm_database_user_password:
     type: password
     required: false
-    title: Database user password for the OrangeHRM application
+    title: OrangeHRM Database User Password
+    description: Database user password for the OrangeHRM application
 
   database_hostname:
     type: string

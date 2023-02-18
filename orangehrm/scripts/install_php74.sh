@@ -13,9 +13,6 @@ else
   yum -y install httpd php php-cli php-mysqlnd php-zip php-mbstring php-xml php-json php-intl
 fi
 
-sed -i '/expose_php = On/c\expose_php = Off' /etc/php.ini
-sed -i 's~DocumentRoot "/var/www/html"~DocumentRoot "/var/www/orangehrm/web"~' /etc/httpd/conf/httpd.conf
-
 echo "PHP successfully installed !"
 
 cd /var/www

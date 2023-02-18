@@ -40,7 +40,7 @@ resource "null_resource" "orangehrm_provisioner" {
 
   provisioner "file" {
     content     = data.template_file.install_php.rendered
-    destination = local.php_script
+    destination = local.script_install_php
 
     connection {
       type        = "ssh"
@@ -64,7 +64,6 @@ resource "null_resource" "orangehrm_provisioner" {
         orangehrm_admin_contact_number    = var.orangehrm_admin_contact_number
         organization_name                 = var.organization_name
         country                           = var.country
-        language                          = var.language
         registration_consent              = var.registration_consent
         database_hostname                 = var.database_hostname
         privileged_database_user_password = var.privileged_database_user_password
@@ -74,7 +73,7 @@ resource "null_resource" "orangehrm_provisioner" {
         orangehrm_database_user_password  = var.orangehrm_database_user_password
       }
     )
-    destination = local.install_orangehrm
+    destination = local.script_install_orangehrm
 
     connection {
       type        = "ssh"
@@ -100,6 +99,48 @@ resource "null_resource" "orangehrm_provisioner" {
     }
   }
 
+  provisioner "file" {
+    source      = "${path.module}/patches/5.3/"
+    destination = local.home_dir
+
+    connection {
+      type        = "ssh"
+      host        = oci_core_public_ip.orangehrm_public_ip_for_single_node.ip_address
+      agent       = false
+      timeout     = "5m"
+      user        = var.vm_user
+      private_key = tls_private_key.public_private_key_pair.private_key_pem
+    }
+  }
+
+  provisioner "file" {
+    content     = templatefile("${path.module}/scripts/apply_patches.sh", { home_dir = local.home_dir })
+    destination = local.script_apply_patches
+
+    connection {
+      type        = "ssh"
+      host        = oci_core_public_ip.orangehrm_public_ip_for_single_node.ip_address
+      agent       = false
+      timeout     = "5m"
+      user        = var.vm_user
+      private_key = tls_private_key.public_private_key_pair.private_key_pem
+    }
+  }
+
+  provisioner "file" {
+    content     = templatefile("${path.module}/scripts/finalize.sh", { apache_orangehrm_conf : local.apache_orangehrm_conf })
+    destination = local.script_finalize
+
+    connection {
+      type        = "ssh"
+      host        = oci_core_public_ip.orangehrm_public_ip_for_single_node.ip_address
+      agent       = false
+      timeout     = "5m"
+      user        = var.vm_user
+      private_key = tls_private_key.public_private_key_pair.private_key_pem
+    }
+  }
+
   provisioner "remote-exec" {
     connection {
       type        = "ssh"
@@ -111,16 +152,15 @@ resource "null_resource" "orangehrm_provisioner" {
     }
 
     inline = [
-      "chmod +x ${local.php_script}",
-      "sudo ${local.php_script}",
-      "chmod +x ${local.install_orangehrm}",
-      "sudo ${local.install_orangehrm}",
-      "sudo mv ${local.apache_orangehrm_conf} /etc/httpd/conf.d/orangehrm.conf",
-      "sudo chown root:root /etc/httpd/conf.d/orangehrm.conf",
-      "sudo chcon -v -t httpd_sys_rw_content_t /etc/httpd/conf.d/orangehrm.conf",
-      "sudo systemctl restart httpd"
+      "chmod +x ${local.script_install_php}",
+      "sudo ${local.script_install_php}",
+      "chmod +x ${local.script_apply_patches}",
+      "sudo ${local.script_apply_patches}",
+      "chmod +x ${local.script_install_orangehrm}",
+      "sudo ${local.script_install_orangehrm}",
+      "chmod +x ${local.script_finalize}",
+      "sudo ${local.script_finalize}",
     ]
-
   }
 }
 
