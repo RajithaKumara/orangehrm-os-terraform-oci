@@ -3,7 +3,7 @@ locals {
 
   is_flex_shape = contains(local.compute_flexible_shapes, var.vm_compute_shape)
 
-  script_install_php       = "/home/${var.vm_user}/install_php74.sh"
+  script_install_php       = "/home/${var.vm_user}/install_php82.sh"
   script_apply_patches     = "/home/${var.vm_user}/script_apply_patches.sh"
   script_install_orangehrm = "/home/${var.vm_user}/install.sh"
   script_finalize          = "/home/${var.vm_user}/finalize.sh"

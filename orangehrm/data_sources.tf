@@ -14,7 +14,7 @@ data "oci_core_images" "autonomous_ol7" {
 }
 
 data "template_file" "install_php" {
-  template = file("${path.module}/scripts/install_php74.sh")
+  template = file("${path.module}/scripts/install_php82.sh")
 }
 
 data "template_file" "key_script" {
