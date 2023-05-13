@@ -6,7 +6,8 @@ echo "${country}"
 
 cd /var/www/orangehrm
 
-php installer/console install:country-list -c "${country}"
+INSTANCE_COUNTRY=$(php installer/console install:country-list -c "${country}" | xargs)
+echo $INSTANCE_COUNTRY
 
 sed -i 's/hostName: 127.0.0.1/hostName: "${database_hostname}"/g' installer/cli_install_config.yaml
 sed -i 's/privilegedDatabaseUser: root/privilegedDatabaseUser: "${privileged_database_username}"/g' installer/cli_install_config.yaml
@@ -25,5 +26,6 @@ sed -i 's/adminEmployeeLastName: Admin/adminEmployeeLastName: "${orangehrm_admin
 sed -i 's/workEmail: admin@example.com/workEmail: "${orangehrm_admin_email}"/g' installer/cli_install_config.yaml
 sed -i 's/contactNumber: ~/contactNumber: "${orangehrm_admin_contact_number}"/g' installer/cli_install_config.yaml
 sed -i 's/registrationConsent: true/registrationConsent: ${registration_consent}/g' installer/cli_install_config.yaml
+sed -i "s/country: US/country: $INSTANCE_COUNTRY/g" installer/cli_install_config.yaml
 
 php installer/cli_install.php
