@@ -17,10 +17,10 @@ echo "PHP successfully installed !"
 
 cd /var/www
 rm -r html
-curl -fSL -o orangehrm.zip "https://sourceforge.net/projects/orangehrm/files/stable/5.3/orangehrm-5.3.zip"
-echo "82f2739e3f8ce4429b283863689ab5a1 orangehrm.zip" | md5sum -c -
-unzip -q orangehrm.zip "orangehrm-5.3/*"
-mv orangehrm-5.3 orangehrm
+curl -fSL -o orangehrm.zip "https://sourceforge.net/projects/orangehrm/files/stable/5.4/orangehrm-5.4.zip"
+echo "24b62161728d9ceb97c6d1d7c9245d1b orangehrm.zip" | md5sum -c -
+unzip -q orangehrm.zip "orangehrm-5.4/*"
+mv orangehrm-5.4 orangehrm
 rm -rf orangehrm.zip
 
 echo "Configure OrangeHRM !"

@@ -35,6 +35,7 @@
         :permissions="{{ (permissions ? permissions : []) | json_encode() }}"
         :breadcrumb="{{ breadcrumb | json_encode() }}"
         :date-format="{{ dateFormat | json_encode() }}"
+        help-url="{{ helpUrl }}"
     >
       <{{ componentName }}
       {% for prop in componentProps %}
@@ -51,7 +52,8 @@
   <script type="text/javascript">
       window.appGlobal = {
         baseUrl: "{{ baseUrl == '' ? '/index.php' : baseUrl }}",
-      }
+        publicPath: "{{ publicPath }}",
+      };
   </script>
   <script src="{{ publicPath }}/dist/js/chunk-vendors.js?v={{ assetsVersion }}"></script>
   <script src="{{ publicPath }}/dist/js/app.js?v={{ assetsVersion }}"></script>

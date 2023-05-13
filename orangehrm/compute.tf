@@ -100,7 +100,7 @@ resource "null_resource" "orangehrm_provisioner" {
   }
 
   provisioner "file" {
-    source      = "${path.module}/patches/5.3/"
+    source      = "${path.module}/patches/5.4/"
     destination = local.home_dir
 
     connection {
